@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Titable</string>
+    <string name="buttonText">缺省</string>
+    <string name="sat">Sat.</string>
+    <string name="mon">Mon.</string>
+    <string name="wed">Wed.</string>
+    <string name="fri">Fri.</string>
+    <string name="thur">Thur.</string>
+    <string name="tue">Tue.</string>
+    <string name="sun">Sun.</string>
+    <string name="monday">一</string>
+    <string name="tues">二</string>
+    <string name="wen">三</string>
+    <string name="thurs">四</string>
+    <string name="friday">五</string>
+    <string name="satu">六</string>
+    <string name="sund">日</string>
+    <string name="lastw">上一周</string>
+    <string name="nextw">下一周</string>
+    <string name="_20">20</string>
+    <string name="just_a_emoji">Just a emoji</string>
+    <string name="something_wrong">出现了一些错误......</string>
+</resources>
