@@ -69,6 +69,27 @@ public class Loading extends AppCompatActivity {
         for(String term :termGroup)
         {
             String singleTable = threadFunction.GetTimeTable(loginCookie,UserID,term);
+            if(UserID.equals("UserIDNetWorkError"))
+            {
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
+                intent1.putExtra("ErrorString","学号网络错误"+"\n"+"可能是修改了接口");
+                startActivity(intent1);
+                break;
+            }
+            else if (UserID.equals("UserIDGetError"))
+            {
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
+                intent1.putExtra("ErrorString","学号解析错误"+"\n"+"可能是修改了规则或者接口");
+                startActivity(intent1);
+                break;
+            }
+            else if (UserID.equals("TimeTableNetWorkError"))
+            {
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
+                intent1.putExtra("ErrorString","课表网络错误"+"\n"+"可能是修改了接口");
+                startActivity(intent1);
+                break;
+            }
             tableGroup.put(term,singleTable);
         }
     }
@@ -92,6 +113,7 @@ public class Loading extends AppCompatActivity {
         }
         catch (Exception e){
             Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
+            intent1.putExtra("ErrorString","课表解析错误"+"\n"+"可能是修改了接口");
             startActivity(intent1);
         }
     }

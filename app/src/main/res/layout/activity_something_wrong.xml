@@ -20,8 +20,8 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="368dp"
-        android:layout_height="49dp"
+        android:layout_width="365dp"
+        android:layout_height="96dp"
         android:gravity="center"
         android:text="@string/something_wrong"
         android:textSize="30sp"

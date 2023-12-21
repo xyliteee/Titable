@@ -45,7 +45,7 @@ public class ThreadFunction
             timeTableData = EntityUtils.toString(entity);
         }catch (Exception e)
         {
-            System.out.println("下载的问题，多半是网络");
+            timeTableData = "TimeTableNetWorkError";
         }
         return timeTableData;
     }
@@ -53,7 +53,7 @@ public class ThreadFunction
     public String GetUserID(String cookie){
         String UserID = "";
         String result = "";
-        String url = "https://ehall.ysu.edu.cn/jsonp/ywtb/info/getUserInfoAndSchoolInfo?";
+        String url = "https://ehall.ysu.edu.cn/getLoginUser";
         HttpGet httpGet = new HttpGet(url);
         httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36");
         httpGet.addHeader("cookie",cookie);
@@ -62,18 +62,22 @@ public class ThreadFunction
             HttpEntity entity = response.getEntity();
             result = EntityUtils.toString(entity);
         } catch (Exception e) {
-            e.printStackTrace();
+            UserID = "UserIDNetWorkError";
+            return UserID;
         }
         try{
-            UserID = new JSONObject(result).getJSONObject("data").getString("userId");
-        }catch (Exception e){System.out.println("也是下载的问题，不想处理");}
+            UserID = new JSONObject(result).getJSONObject("data").getString("userAccount");
+            System.out.println(UserID);
+        }catch (Exception e){
+            UserID = "UserIDGetError";
+        }
         return UserID;
     }
 
     public static HashMap<String,String> LoadTheTableGroup(SharedPreferences sharedPreferences)
     {
         String jsonString = sharedPreferences.getString("TableGroup","None");
-        if (jsonString != "None")
+        if (!jsonString.equals("None"))
         {
             Gson gson = new Gson();
             HashMap<String, String> tableGroup = gson.fromJson(jsonString, HashMap.class);

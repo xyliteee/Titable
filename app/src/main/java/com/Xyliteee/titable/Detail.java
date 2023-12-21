@@ -25,7 +25,6 @@ public class Detail extends AppCompatActivity {
         }
     }
 
-
     private void SetDetail(Course currentCourse)
     {
         TextView nameText = findViewById(R.id.Name);
