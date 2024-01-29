@@ -21,15 +21,6 @@ public class Loading extends AppCompatActivity {
     private HashMap<String, String> tableGroup;
     private final ThreadFunction threadFunction = new ThreadFunction();
     private SharedPreferences sharedPreferences;
-    private String[] termGroup = {
-            "2020-2021-1",
-            "2020-2021-2",
-            "2021-2022-1",
-            "2021-2022-2",
-            "2022-2023-1",
-            "2022-2023-2",
-            "2023-2024-1"
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +42,8 @@ public class Loading extends AppCompatActivity {
             Handler handler = new Handler(Looper.getMainLooper());
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {                                                                //执行新线程
-                String UserID = threadFunction.GetUserID(userIDCookie);                             //通过传入的cookie获取学号
+                //String UserID = threadFunction.GetUserID(userIDCookie);                             //通过传入的cookie获取学号
+                String UserID = "1145141919810";                                                    //现在不再需要学号，因此不进行网络访问，随便给一个即可,但考虑到未来，依旧保留这个变量
                 handler.post(() -> {                                                                //获取完成后
                     executor.execute(() -> {                                                        //执行新线程
                         GetTableGroups(loginCookie,UserID);
@@ -66,7 +58,7 @@ public class Loading extends AppCompatActivity {
 
     private void GetTableGroups(String loginCookie,String UserID){
 
-        for(String term :termGroup)
+        for(String term :StaticSource.termGroupString)
         {
             String singleTable = threadFunction.GetTimeTable(loginCookie,UserID,term);
             if(UserID.equals("UserIDNetWorkError"))
@@ -121,31 +113,13 @@ public class Loading extends AppCompatActivity {
     private String GetCurrentTerm()
     {
         LocalDate now = LocalDate.now();
-        LocalDate[] termStarts = {
-                LocalDate.of(2020, 9, 1),
-                LocalDate.of(2021, 3, 1),
-                LocalDate.of(2021, 9, 1),
-                LocalDate.of(2022, 3, 1),
-                LocalDate.of(2022, 9, 1),
-                LocalDate.of(2023, 3, 1),
-                LocalDate.of(2023, 9, 1)
-        };
-        LocalDate[] termEnds = {
-                LocalDate.of(2021, 2, 28),
-                LocalDate.of(2021, 8, 31),
-                LocalDate.of(2022, 2, 28),
-                LocalDate.of(2022, 8, 31),
-                LocalDate.of(2023, 2, 28),
-                LocalDate.of(2023, 8, 31),
-                LocalDate.of(2024, 2, 29)
-        };
 
-        for (int i = 0; i < termStarts.length; i++) {
-            if ((now.isAfter(termStarts[i]) || now.isEqual(termStarts[i])) && (now.isBefore(termEnds[i]) || now.isEqual(termEnds[i]))) {
-                return termGroup[i];
+        for (int i = 0; i < StaticSource.termStarts.length; i++) {
+            if ((now.isAfter(StaticSource.termStarts[i]) || now.isEqual(StaticSource.termStarts[i])) && (now.isBefore(StaticSource.termEnds[i]) || now.isEqual(StaticSource.termEnds[i]))) {
+                //return termGroup[i];                                                              //暂时不考虑学期的切换
             }
         }
-        return "2023-2024-1";
+        return "2023-2024-2";
     }
 
 

@@ -50,7 +50,7 @@ public class ThreadFunction
         return timeTableData;
     }
 
-    public String GetUserID(String cookie){
+    public String GetUserID(String cookie){                                                         //学校接口更新，不再需要学号，但为了各方面考虑，目前依旧保留方法
         String UserID = "";
         String result = "";
         String url = "https://ehall.ysu.edu.cn/getLoginUser";

@@ -50,9 +50,8 @@ public class TimeTable extends AppCompatActivity {
 
     private void GetCurrentWeek()
     {
-        LocalDate firstMonday = LocalDate.of(2023, 8, 28);
         LocalDate today = LocalDate.now();
-        long weeks = ChronoUnit.WEEKS.between(firstMonday, today);
+        long weeks = ChronoUnit.WEEKS.between(StaticSource.firstMonday, today);
         currentWeek = (int)(weeks+1);
         if(currentWeek >= 20)                                                                       //防止时间过久导致的周数超出或者开课前发布课表导致的周数为负数
         {
