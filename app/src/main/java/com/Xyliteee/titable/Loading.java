@@ -63,26 +63,33 @@ public class Loading extends AppCompatActivity {
             String singleTable = threadFunction.GetTimeTable(loginCookie,UserID,term);
             if(UserID.equals("UserIDNetWorkError"))
             {
-                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);      //出现错误，去往错误界面
                 intent1.putExtra("ErrorString","学号网络错误"+"\n"+"可能是修改了接口");
                 startActivity(intent1);
                 break;
             }
             else if (UserID.equals("UserIDGetError"))
             {
-                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);      //出现错误，去往错误界面
                 intent1.putExtra("ErrorString","学号解析错误"+"\n"+"可能是修改了规则或者接口");
                 startActivity(intent1);
                 break;
             }
-            else if (UserID.equals("TimeTableNetWorkError"))
-            {
-                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
-                intent1.putExtra("ErrorString","课表网络错误"+"\n"+"可能是修改了接口");
+            else if (singleTable.equals("TimeTableNetWorkError")) {
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);      //出现错误，去往错误界面
+                intent1.putExtra("ErrorString", "课表网络错误" + "\n" + "可能是修改了接口");
                 startActivity(intent1);
                 break;
             }
-            tableGroup.put(term,singleTable);
+            try{
+                int messageCode = new JSONObject(singleTable).getJSONObject("datas").getJSONObject("cxxskb").getJSONObject("extParams").getInt("code");
+                if (messageCode == 1){tableGroup.put(term,singleTable);}                            //确认获取到的课表数据编码为1，也就是成功获取，才进行存储
+            }catch (Exception e){
+                Intent intent1 = new Intent(Loading.this, SomethingWrong.class);      //出现错误，去往错误界面
+                intent1.putExtra("ErrorString","课表解析错误"+"\n"+"无法获得解析结果编码");
+                startActivity(intent1);
+            }
+
         }
     }
 
@@ -105,7 +112,7 @@ public class Loading extends AppCompatActivity {
         }
         catch (Exception e){
             Intent intent1 = new Intent(Loading.this, SomethingWrong.class);          //出现错误，去往错误界面
-            intent1.putExtra("ErrorString","课表解析错误"+"\n"+"可能是修改了接口");
+            intent1.putExtra("ErrorString","课表解析错误"+"\n"+"可能是修改了数据类型");
             startActivity(intent1);
         }
     }
@@ -119,7 +126,7 @@ public class Loading extends AppCompatActivity {
                 //return termGroup[i];                                                              //暂时不考虑学期的切换
             }
         }
-        return "2023-2024-2";
+        return StaticSource.currentTerm;
     }
 
 
