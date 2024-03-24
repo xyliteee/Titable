@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebResourceRequest;
 import android.webkit.CookieManager;
 import android.view.View;
 import android.widget.Button;
 import android.content.*;
 import android.widget.Toast;
+
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private Intent intent;
     private long mExitTime = 0;
-    private String cookieForGettingUserID;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -49,36 +52,29 @@ public class MainActivity extends AppCompatActivity {
     public void Analysis(View view)                                                                 //连接到确认按钮的函数
     {
         intent = new Intent(MainActivity.this, Loading.class);
-        TimeTableSearchInfo.getInstance(loginCookie,cookieForGettingUserID);                        //将登录cookie和获取学号的cookie实例化在TimeTableSearchInfo中
+        TimeTableSearchInfo.getInstance(loginCookie);                                               //将登录cookie和获取学号的cookie实例化在TimeTableSearchInfo中
         startActivity(intent);                                                                      //跳转到加载页面
     }
     @SuppressLint("SetJavaScriptEnabled")
     private void LoginInit(){
         button.setVisibility(View.INVISIBLE);                                                       //先设置按钮不可见防止误触
         loginWebview.setVisibility(View.VISIBLE);
-        loginWebview.setWebViewClient(new WebViewClient()
-        {
+        loginWebview.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                CookieManager cookieManager = CookieManager.getInstance();                          //创建一个cookie管理器
-                System.out.println(url);
-                if(url.contains("/wdkb"))                                                           //如果进入到课表界面
-                {
-                    loginCookie = cookieManager.getCookie(url);                                     //储存loginCookie
-                    button.setVisibility(View.VISIBLE);                                             //确定按钮可见
-                    Toast.makeText(MainActivity.this, "检索到课表信息，点击确认定位", Toast.LENGTH_SHORT).show();//为了防止webView因为快速响应导致的崩溃，所以采取手动确认
+                CookieManager cookieManager = CookieManager.getInstance(); // 创建一个cookie管理器
+                if(url.contains("/wdkb")) { // 如果进入到课表界面
+                    button.setVisibility(View.VISIBLE); // 确定按钮可见
+                    loginCookie = cookieManager.getCookie(url);
 
-                }
-                else if(url.contains("index.html#"))                                                //如果是在主页面
-                {
-
-                    cookieForGettingUserID = cookieManager.getCookie(url);                          //储存主页面cookie用于获取学号
-                    loginWebview.loadUrl("http://ehall.ysu.edu.cn/jwapp/sys/syxkjg/*default/index.do");//跳转到课表界面,老是跳错，先关闭
+                    Toast.makeText(MainActivity.this, "检索到课表信息，点击确认定位", Toast.LENGTH_SHORT).show(); // 为了防止webView因为快速响应导致的崩溃，所以采取手动确认
+                } else if(url.contains("index.html#")) { // 如果是在主页面
+                    loginWebview.loadUrl("http://ehall.ysu.edu.cn/jwapp/sys/syxkjg/*default/index.do"); // 跳转到课表界面
                 }
             }
-        }
-        );
+
+        });
         loginWebview.loadUrl("https://cer.ysu.edu.cn/authserver/login?service=https%3A%2F%2Fehall.ysu.edu.cn%2Flogin");//进入登陆界面
         WebSettings settings = loginWebview.getSettings();
         settings.setJavaScriptEnabled(true);

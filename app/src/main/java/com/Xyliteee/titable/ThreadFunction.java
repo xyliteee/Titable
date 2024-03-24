@@ -27,7 +27,8 @@ public class ThreadFunction
 {
     CookieStore cookieStore = new BasicCookieStore();
     private final CloseableHttpClient httpClient = HttpClients.custom ().setDefaultCookieStore(cookieStore).build();
-    public String GetTimeTable(String cookie,String UserID,String Date){
+
+    public String GetTimeTable(String cookie,String Date){
         String url = "https://ehall.ysu.edu.cn/jwapp/sys/syxkjg/modules/wdkb/cxxskb.do";
         HttpPost httpPost = new HttpPost(url);
         httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36");
@@ -35,8 +36,6 @@ public class ThreadFunction
         List<NameValuePair> params = new ArrayList<>();
         String timeTableData = "null";
         params.add(new BasicNameValuePair("XNXQDM", Date));
-        params.add(new BasicNameValuePair("XH", UserID));
-        params.add(new BasicNameValuePair("KBLB", "0"));
         httpPost.setEntity(new UrlEncodedFormEntity(params));
         try
         {
